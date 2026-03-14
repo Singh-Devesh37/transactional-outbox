@@ -1,0 +1,36 @@
+app:
+  port: "8080"
+  poller_interval: 5
+  batch_size: 100
+  max_retries: 5
+  base_backoff: 1
+  breaker_backoff: 1
+  cleanup_interval: 1
+  cleanup_sent_threshold: 7
+  cleanup_dead_threshold: 30
+  # Circuit breaker settings
+  cb_max_requests: 3          # Max requests allowed in half-open state
+  cb_interval: 60             # Seconds - interval to clear failure counts
+  cb_timeout: 30              # Seconds - time before moving from open to half-open
+  cb_consecutive_failures: 5  # Number of consecutive failures to open circuit
+  # Worker pool settings
+  worker_count: 5             # Number of concurrent workers for event processing
+  # Rate limiting
+  rate_limit_per_second: 1000 # Max events per second (0 = unlimited)
+db:
+  host: postgres
+  port: 5432
+  user: postgres
+  password: postgres
+  dbname: outboxdb
+  sslmode: disable
+kafka:
+  brokers:
+    - "kafka:9092"
+  topic: "outbox_events"
+  dlq_topic: "outbox_dlq_events"
+  acks: "all"
+  retries: 5
+  batch_size: 10000
+  linger_ms: 10
+  compression: "snappy"
